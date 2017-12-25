@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' />
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        
+        .box {
+            width: 400px;
+            height: 500px;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="box"></div>
+    </div>
+    <script>
+        var box = document.querySelector('.box');
+        var wrap = document.querySelector('.wrap');
+        //实例对象只有原型构造函数
+        //原型构造函数才有原型属性
+        box.constructor.prototype.longTap = function(fun) {
+            var startTime, startx, starty, movex, movey, endTime;
+            this.addEventListener('touchstart', function(e) {
+                var touch = e.touches[0];
+                startTime = new Date() * 1;
+                startx = movex = touch.clientX;
+                starty = movey = touch.clientY;
+                // console.log('开始' + movex, movey);
+            }, false);
+            this.addEventListener('touchmove', function(e) {
+                var touch = e.touches[0];
+                movex = touch.clientX;
+                movey = touch.clientY;
+                // console.log('移动' + movex, movey);
+            }, false)
+            this.addEventListener('touchend', function() {
+                endTime = new Date() * 1;
+                //时长 > 1000
+                //距离 < 20
+                if (endTime - startTime > 1000 && Math.abs(movex - startx) < 20 && Math.abs(movey - starty) < 20) {
+                    fun();
+                }
+                //console.log(movex - startx);
+            }, false)
+        };
+        //长安
+        box.longTap(function() {
+            alert('长按事件')
+        })
+    </script>
+</body>
+
+</html>
